@@ -1,0 +1,20 @@
+{
+  "name": "samtest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "sam-export": "node_modules/.bin/serverless sam export --output ./template.yml",
+    "start-sam": "sam local start-api --port 3002",
+    "debug-sam": "sam local start-api -d 5858 --port 3002",
+    "start-offline": "node_modules/.bin/serverless offline start --port 3001"
+  },
+  "devDependencies": {
+    "serverless": "^1.29.0",
+    "serverless-offline": "^3.25.6",
+    "serverless-sam": "^0.1.0"
+  },
+  "dependencies": {
+    "mysql": "^2.16.0"
+  }
+}

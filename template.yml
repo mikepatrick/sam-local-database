@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 'SAM template for Serverless framework service: '
+Resources:
+  Hello:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: handler.hello
+      Runtime: nodejs6.10
+      MemorySize: 128
+      Timeout: 30
+      Events:
+        Event1:
+          Type: Api
+          Properties:
+            Path: /users/create
+            Method: get
+            RestApiId:
+              Ref: Samtest
+  Samtest:
+    Type: 'AWS::Serverless::Api'
+    Properties:
+      StageName: dev
+      DefinitionBody:
+        swagger: '2.0'
+        info:
+          title:
+            Ref: 'AWS::StackName'
+        paths:
+          /users/create:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri:
+                  'Fn::Sub': >-
+                    arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Hello.Arn}/invocations
+              responses: {}
+  HelloLambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    DependsOn:
+      - Hello
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName:
+        Ref: Hello
+      Principal: apigateway.amazonaws.com

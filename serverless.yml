@@ -1,0 +1,30 @@
+service: samtest
+
+plugins:
+  - serverless-sam
+  - serverless-offline
+  
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: us-east-1
+
+functions:
+  hello:
+    handler: handler.hello
+    timeout: 30
+    events:
+      - http:
+          path: users/create
+          method: get
+#resources:
+#  Resources:
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+#  Outputs:
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
